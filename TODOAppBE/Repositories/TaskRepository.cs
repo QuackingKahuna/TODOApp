@@ -1,13 +1,20 @@
-﻿namespace TODOAppBE.Repositories
+﻿using TODOAppBE.Entities;
+
+namespace TODOAppBE.Repositories
 {
     public interface ITaskRepository
     {
-
+        TaskEntity Insert(TaskEntity task);
     }
 
     public class TaskRepository : ITaskRepository
     {
-        public List<Task> Tasks = new List<Task>();
+        private List<TaskEntity> TaskEntities = new List<TaskEntity>();
 
+        public TaskEntity Insert(TaskEntity task)
+        {
+            TaskEntities.Add(task);
+            return task;
+        }
     }
 }
