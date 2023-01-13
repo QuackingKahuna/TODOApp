@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TODOAppBE", "TODOAppBE\TODO
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "todoappfe", "todoAppFe\todoappfe.esproj", "{28990871-E800-42C8-959A-19CDD5736F89}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TODOAppBeTests", "TODOAppBeTests\TODOAppBeTests.csproj", "{DFDC3191-29DC-4D87-9B2F-50D265056D11}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{28990871-E800-42C8-959A-19CDD5736F89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28990871-E800-42C8-959A-19CDD5736F89}.Release|Any CPU.Build.0 = Release|Any CPU
 		{28990871-E800-42C8-959A-19CDD5736F89}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{DFDC3191-29DC-4D87-9B2F-50D265056D11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFDC3191-29DC-4D87-9B2F-50D265056D11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFDC3191-29DC-4D87-9B2F-50D265056D11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFDC3191-29DC-4D87-9B2F-50D265056D11}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
