@@ -16,6 +16,35 @@ namespace TODOAppBeTests
         }
 
         [Fact]
+        public void DeleteTask_Completed_ValidName()
+        {
+            var input = new TaskEntity("Name", 1, TODOAppBE.Common.Status.Completed);
+            _sut.Insert(input);
+
+            var res = _sut.Delete("Name");
+
+            Assert.Equivalent("Name", res);
+        }
+
+        [Fact]
+        public void DeleteTask_IsNotCompleted()
+        {
+            var input = new TaskEntity("Name", 1, TODOAppBE.Common.Status.NotStarted);
+            _sut.Insert(input);
+
+            Should.Throw<Exception>(() => _sut.Delete("Name"));
+        }
+
+        [Fact]
+        public void DeleteTask_InvalidName()
+        {
+            var input = new TaskEntity("Name", 1, TODOAppBE.Common.Status.Completed);
+            _sut.Insert(input);
+
+            Should.Throw<Exception>(() => _sut.Delete("Name2"));
+        }
+
+        [Fact]
         public void InsertTask_ExistingName()
         {
             var input = new TaskEntity("Name", 1, TODOAppBE.Common.Status.NotStarted);
@@ -37,34 +66,12 @@ namespace TODOAppBeTests
         }
 
         [Fact]
-        public void GetTask_InvalidName_ReturnNull()
+        public void GetTask_InvalidName_ReturnsNull()
         {
             var input = new TaskEntity("Name", 1, TODOAppBE.Common.Status.NotStarted);
             _sut.Insert(input);
 
             var res = _sut.Get("Name2");
-
-            Assert.Equivalent(null, res);
-        }
-
-        [Fact]
-        public void DeleteTask_ValidName()
-        {
-            var input = new TaskEntity("Name", 1, TODOAppBE.Common.Status.NotStarted);
-            _sut.Insert(input);
-
-            var res = _sut.Delete("Name");
-
-            Assert.Equivalent("Name", res);
-        }
-
-        [Fact]
-        public void DeleteTask_InvalidName()
-        {
-            var input = new TaskEntity("Name", 1, TODOAppBE.Common.Status.NotStarted);
-            _sut.Insert(input);
-
-            var res = _sut.Delete("Name2");
 
             Assert.Equivalent(null, res);
         }

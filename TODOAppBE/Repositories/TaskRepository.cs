@@ -1,5 +1,5 @@
-﻿using TODOAppBE.Entities;
-using System.Linq;
+﻿using TODOAppBE.Common;
+using TODOAppBE.Entities;
 
 namespace TODOAppBE.Repositories
 {
@@ -17,10 +17,15 @@ namespace TODOAppBE.Repositories
         public string Delete(string taskName)
         {
             var entityToRemove = Get(taskName);
-            if (entityToRemove != null) 
-                TaskEntities.Remove(entityToRemove);
+            if (entityToRemove != null)
+            {
+                if (entityToRemove.Status == Status.Completed)
+                    TaskEntities.Remove(entityToRemove);
+                else throw new Exception("Task has not been completed yet.");
+            }
+            else throw new Exception($"There is not any task: {taskName}");
 
-            return entityToRemove?.Name;
+            return entityToRemove.Name;
         }
 
         public TaskEntity Get(string taskName)
