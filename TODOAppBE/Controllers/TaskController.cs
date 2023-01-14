@@ -8,6 +8,7 @@ namespace TODOAppBE.Controllers
 {
     public interface ITaskController
     {
+        string Delete(Guid id);
         bool Edit(TaskDto dto);
         Guid Insert(InsertTaskDto dto);
         TaskDto Get(Guid id);
@@ -29,6 +30,14 @@ namespace TODOAppBE.Controllers
             _taskRepository = taskRepository;
         }
 
+        [HttpDelete]
+        public string Delete(Guid id)
+        {
+            var name = _taskRepository.Delete(id);
+            return name;
+        }
+
+        [HttpPost]
         public bool Edit(TaskDto dto)
         {
             var entity = _taskRepository.Get(dto.Id);
