@@ -6,6 +6,8 @@ namespace TODOAppBE.Repositories
     public interface ITaskRepository
     {
         string Delete(Guid id);
+        
+        /// <inheritdoc cref="TaskRepository.Get"/>
         TaskEntity Get(Guid id);
         IList<TaskEntity> GetAll();
         TaskEntity Insert(TaskEntity task);
@@ -28,6 +30,7 @@ namespace TODOAppBE.Repositories
             return entityToRemove?.Name;
         }
 
+        /// <returns>TaskEntity or null</returns>
         public TaskEntity Get(Guid id)
         {
             return TaskEntities.FirstOrDefault(x => x.Id.Equals(id));
