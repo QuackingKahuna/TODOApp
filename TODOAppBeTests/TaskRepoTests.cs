@@ -1,5 +1,6 @@
 using Shouldly;
 using System;
+using System.Collections.Generic;
 using TODOAppBE.Common;
 using TODOAppBE.Entities;
 using TODOAppBE.Repositories;
@@ -77,6 +78,23 @@ namespace TODOAppBeTests
             var res = _sut.Get(Guid.NewGuid());
 
             Assert.Equivalent(null, res);
+        }
+
+        [Fact]
+        public void GetAll_ReturnsAllTasks()
+        {
+            var input = new TaskEntity("Name", 1, Status.NotStarted);
+            var input2 = new TaskEntity("Name2", 2, Status.NotStarted);
+            var allTasks = new List<TaskEntity>
+            {
+                input, input2
+            };
+            _sut.Insert(input);
+            _sut.Insert(input2);
+
+            var res = _sut.GetAll();
+
+            Assert.Equivalent(allTasks, res);
         }
     }
 }

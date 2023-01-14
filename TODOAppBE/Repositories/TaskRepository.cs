@@ -7,6 +7,7 @@ namespace TODOAppBE.Repositories
     {
         string Delete(Guid id);
         TaskEntity Get(Guid id);
+        IList<TaskEntity> GetAll();
         TaskEntity Insert(TaskEntity task);
     }
 
@@ -30,6 +31,11 @@ namespace TODOAppBE.Repositories
         public TaskEntity Get(Guid id)
         {
             return TaskEntities.FirstOrDefault(x => x.Id.Equals(id));
+        }
+
+        public IList<TaskEntity> GetAll()
+        {
+            return TaskEntities;
         }
 
         public TaskEntity Insert(TaskEntity task)
