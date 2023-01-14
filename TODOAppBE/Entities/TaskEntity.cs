@@ -30,6 +30,11 @@ namespace TODOAppBE.Entities
             Priority = newPriority;
         }
 
+        public void NotStarted()
+        {
+            Status = Status.NotStarted;
+        }
+
         public void InProgress()
         {
             Status = Status.InProgress;
