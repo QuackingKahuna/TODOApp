@@ -1,5 +1,6 @@
 using Shouldly;
 using System;
+using TODOAppBE.Common;
 using TODOAppBE.Entities;
 using TODOAppBE.Repositories;
 using Xunit;
@@ -16,62 +17,64 @@ namespace TODOAppBeTests
         }
 
         [Fact]
-        public void DeleteTask_Completed_ValidName()
+        public void DeleteTask_StatusCompleted_ReturnsName()
         {
-            var input = new TaskEntity("Name", 1, TODOAppBE.Common.Status.Completed);
+            var input = new TaskEntity("Name", 1, Status.Completed);
             _sut.Insert(input);
 
-            var res = _sut.Delete("Name");
+            var res = _sut.Delete(input.Id);
 
             Assert.Equivalent("Name", res);
         }
 
         [Fact]
-        public void DeleteTask_IsNotCompleted()
+        public void DeleteTask_StatusIsNotCompleted_Fails()
         {
-            var input = new TaskEntity("Name", 1, TODOAppBE.Common.Status.NotStarted);
+            var input = new TaskEntity("Name", 1, Status.NotStarted);
             _sut.Insert(input);
 
-            Should.Throw<Exception>(() => _sut.Delete("Name"));
+            Should.Throw<Exception>(() => _sut.Delete(input.Id));
         }
 
         [Fact]
-        public void DeleteTask_InvalidName()
+        public void DeleteTask_FakeId_ReturnsNull()
         {
-            var input = new TaskEntity("Name", 1, TODOAppBE.Common.Status.Completed);
+            var input = new TaskEntity("Name", 1, Status.Completed);
             _sut.Insert(input);
 
-            Should.Throw<Exception>(() => _sut.Delete("Name2"));
+            var res = _sut.Delete(Guid.NewGuid());
+
+            Assert.Equivalent(null, res);
         }
 
         [Fact]
-        public void InsertTask_ExistingName()
+        public void InsertTask_ExistingName_Fails()
         {
-            var input = new TaskEntity("Name", 1, TODOAppBE.Common.Status.NotStarted);
+            var input = new TaskEntity("Name", 1, Status.NotStarted);
             _sut.Insert(input);
-            var input2 = new TaskEntity("Name", 2, TODOAppBE.Common.Status.NotStarted);
+            var input2 = new TaskEntity("Name", 2, Status.NotStarted);
             
             Should.Throw<Exception>(() => _sut.Insert(input2));
         }
 
         [Fact]
-        public void InsertAndGetTask_ValidName()
+        public void InsertAndGetTask()
         {
-            var input = new TaskEntity("Name", 1, TODOAppBE.Common.Status.NotStarted);
+            var input = new TaskEntity("Name", 1, Status.NotStarted);
             _sut.Insert(input);
 
-            var res = _sut.Get("Name");
+            var res = _sut.Get(input.Id);
 
             Assert.Equivalent(input, res);
         }
 
         [Fact]
-        public void GetTask_InvalidName_ReturnsNull()
+        public void GetTask_FakeId_ReturnsNull()
         {
-            var input = new TaskEntity("Name", 1, TODOAppBE.Common.Status.NotStarted);
+            var input = new TaskEntity("Name", 1, Status.NotStarted);
             _sut.Insert(input);
 
-            var res = _sut.Get("Name2");
+            var res = _sut.Get(Guid.NewGuid());
 
             Assert.Equivalent(null, res);
         }

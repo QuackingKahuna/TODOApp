@@ -5,8 +5,8 @@ namespace TODOAppBE.Repositories
 {
     public interface ITaskRepository
     {
-        string Delete(string taskName);
-        TaskEntity Get(string taskName);
+        string Delete(Guid id);
+        TaskEntity Get(Guid id);
         TaskEntity Insert(TaskEntity task);
     }
 
@@ -14,23 +14,22 @@ namespace TODOAppBE.Repositories
     {
         private IList<TaskEntity> TaskEntities = new List<TaskEntity>();
 
-        public string Delete(string taskName)
+        public string Delete(Guid id)
         {
-            var entityToRemove = Get(taskName);
+            var entityToRemove = Get(id);
             if (entityToRemove != null)
             {
                 if (entityToRemove.Status == Status.Completed)
                     TaskEntities.Remove(entityToRemove);
                 else throw new Exception("Task has not been completed yet.");
             }
-            else throw new Exception($"There is not any task: {taskName}");
 
-            return entityToRemove.Name;
+            return entityToRemove?.Name;
         }
 
-        public TaskEntity Get(string taskName)
+        public TaskEntity Get(Guid id)
         {
-            return TaskEntities.FirstOrDefault(x => x.Name.Equals(taskName));
+            return TaskEntities.FirstOrDefault(x => x.Id.Equals(id));
         }
 
         public TaskEntity Insert(TaskEntity task)
