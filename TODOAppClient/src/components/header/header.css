@@ -1,0 +1,18 @@
+.Header-logo {
+    height: 10vmin;
+    pointer-events: none;
+}
+
+.header {
+    background-color: white;
+    min-height: 12vh;
+    min-width: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: calc(10px + 2vmin);
+    color: #039dfc;
+    border-bottom: 1px solid #039dfc;
+    padding: 0vh 5vh;
+    box-shadow: 0vh 0.1vh 1vh #039dfc;
+}

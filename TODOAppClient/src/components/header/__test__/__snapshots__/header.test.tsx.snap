@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+<div
+  className="header"
+>
+  <span
+    data-testid="name"
+  >
+    Barclays TODO Assesment
+  </span>
+  <img
+    alt="logo"
+    className="Header-logo"
+    src="logo.svg"
+  />
+</div>
+`;
