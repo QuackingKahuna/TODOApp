@@ -188,11 +188,13 @@ export const Task: React.FC<Props> = ({taskAction, databaseData, refreshHook, ex
     var className = "task";
     var actionIcon = faPencil
     if(taskAction === TaskAction.Save){
-        className += " addTask";
+        className += " add-task";
         actionIcon = faFloppyDisk
     }
-    if(changesToSave()){
-        className += " change"
+    switch(taskData.status){
+        case Status.NotStarted: className += " not-started"; break;
+        case Status.InProgress: className += " in-progress"; break;
+        case Status.Completed: className += " completed"; break;
     }
 
     return (
@@ -220,14 +222,21 @@ export const Task: React.FC<Props> = ({taskAction, databaseData, refreshHook, ex
                     <option value="30">Completed</option> 
                 </select>
             </div>
+            {!((taskAction === TaskAction.Save && taskData.name) || (taskAction === TaskAction.Edit && changesToSave())) &&
+                // Visual placeholder for edit action
+                <button className="action">
+                </button>
+            }
             {!(taskAction === TaskAction.Edit && taskData.status === Status.Completed) &&
                 // Visual placeholder for delete action
                 <button className="delete">
                 </button>
             }
-            <button className="action" onClick={upsertTask}>
-                <FontAwesomeIcon icon={actionIcon} size="2x"/>
-            </button>
+            {((taskAction === TaskAction.Save && taskData.name) || (taskAction === TaskAction.Edit && changesToSave())) &&
+                <button className="action" onClick={upsertTask}>
+                    <FontAwesomeIcon icon={actionIcon} size="2x"/>
+                </button>
+            }
             {taskAction === TaskAction.Edit && taskData.status === Status.Completed &&
                 <button className="delete" onClick={deleteTask}>
                     <FontAwesomeIcon icon={faTrashCan} size="2x"/>

@@ -13,8 +13,8 @@ export const Counter: React.FC<Props> = ({increase, decrease, value}) => {
         <div className="counter">
             <div className="value">{value}</div>
             <div className="buttons">
-                <button className="plus" onClick={increase}>+</button>
-                <button className="minus" onClick={decrease}>-</button>
+                <button className="plus" onClick={increase}>{"<"}</button>
+                <button className="minus" onClick={decrease}>{"<"}</button>
             </div>
         </div>
     )

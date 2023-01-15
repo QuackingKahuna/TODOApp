@@ -23,17 +23,13 @@ select {
     transform: scale(1.05);
 }
 
-.addTask {
+.add-task {
     margin-top: 1vh;
     margin-bottom: 5vh;
 }
 
-.change {
-    background-color: #d1f0f8;
-}
-
 .name {
-    flex: 10;
+    flex: 8;
     text-align: center;
     min-height: 5vh;
     background-color: transparent;
@@ -73,4 +69,19 @@ select {
 
 .action:active, .delete:active{
     transform: scale(0.9);
+}
+
+.not-started {
+    background: rgb(255,176,14);
+    background: linear-gradient(90deg, rgba(255,176,14,1) 0%, rgba(255,255,255,1) 2%, rgba(255,255,255,1) 100%);
+}
+
+.in-progress {
+    background: rgb(97,218,251);
+    background: linear-gradient(90deg, rgba(97,218,251,1) 0%, rgba(255,255,255,1) 2%, rgba(255,255,255,1) 100%);
+}
+
+.completed {
+    background: rgb(0,189,42);
+    background: linear-gradient(90deg, rgba(0,189,42,1) 0%, rgba(255,255,255,1) 2%, rgba(255,255,255,1) 100%);
 }
