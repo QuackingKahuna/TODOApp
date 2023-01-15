@@ -23,15 +23,20 @@ select {
     transform: scale(1.05);
 }
 
-.addTask{
+.addTask {
     margin-top: 1vh;
     margin-bottom: 5vh;
+}
+
+.change {
+    background-color: #d1f0f8;
 }
 
 .name {
     flex: 10;
     text-align: center;
     min-height: 5vh;
+    background-color: transparent;
 }
 
 .priority {
@@ -43,10 +48,15 @@ select {
 .status {
     flex: 2;
     text-align: center;
+    background-color: transparent;
+}
+
+.status--select {
+    background-color: transparent;
 }
 
 .action, .delete {
-    background-color: white;
+    background-color: transparent;
     flex: 1;
     padding: 1.1vh 0;
     border: 0vh;

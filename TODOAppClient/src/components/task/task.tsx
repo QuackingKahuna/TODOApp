@@ -10,27 +10,29 @@ export const enum Status {
     Completed = 30
 }
 
-interface TaskData{
-    name: string,
-    priority: number,
-    status: Status
-}
-
 export const enum TaskAction {
     Save = 1,
     Edit = 2
 }
 
-interface Props{
-    taskAction: TaskAction
-    status?: Status
+export interface TaskData{
+    id?: string, //Guid on BE
+    name: string,
+    priority: number,
+    status: Status
 }
 
-export const Task: React.FC<Props> = ({taskAction, status}) => {
+interface Props{
+    databaseData?: TaskData
+    taskAction: TaskAction
+    refreshHook?:() => void
+}
+
+export const Task: React.FC<Props> = ({taskAction, databaseData}) => {
     const [taskData, setTaskData] = React.useState<TaskData>({
-        name: "",
-        priority: 1,
-        status: status ? status : Status.NotStarted
+        name: databaseData ? databaseData?.name : "",
+        priority: databaseData ? databaseData.priority : 1,
+        status: databaseData ? databaseData.status : Status.NotStarted
     })
     
     function handleChange(event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) {
@@ -61,14 +63,48 @@ export const Task: React.FC<Props> = ({taskAction, status}) => {
         })
     }
     
+    function upsertTask(){
+        if(taskData.name){
+            if(taskAction === TaskAction.Save){
+                //TODO send insert
+            }
+            else if (changesToSave()) {
+                //TODO send edit
+            }
+        }
+        else
+            alert("Please provide a task name")
+    }
+
+    function deleteTask(){
+        if(taskData.status == Status.Completed){
+            //TODO delete
+        }
+        else
+            alert("Only completed tasks can be deleted")
+    }
+
+    function changesToSave(): boolean{
+        if(databaseData){
+            if (databaseData.name !== taskData.name 
+                || databaseData.priority !== taskData.priority
+                || databaseData.status != taskData.status){
+                return true
+            }
+        }
+        return false
+    }
+
     var className = "task";
     var actionIcon = faPencil
     if(taskAction === TaskAction.Save){
         className += " addTask";
         actionIcon = faFloppyDisk
     }
+    if(changesToSave()){
+        className += " change"
+    }
 
-    console.log(taskData, actionIcon)
     return (
         <div className={className}>
             <input 
@@ -87,6 +123,7 @@ export const Task: React.FC<Props> = ({taskAction, status}) => {
                     value={taskData.status}
                     onChange={handleChange}
                     name="status"
+                    className="status--select"
                 >
                     <option value="10">Not started</option>
                     <option value="20">In Progress</option>
@@ -94,15 +131,18 @@ export const Task: React.FC<Props> = ({taskAction, status}) => {
                 </select>
             </div>
             {!(taskAction === TaskAction.Edit && taskData.status == Status.Completed) &&
+                // Visual placeholder for delete action
                 <button className="delete">
-                </button>}
-            <button className="action">
+                </button>
+            }
+            <button className="action" onClick={upsertTask}>
                 <FontAwesomeIcon icon={actionIcon} size="2x"/>
             </button>
             {taskAction === TaskAction.Edit && taskData.status == Status.Completed &&
-                <button className="delete">
+                <button className="delete" onClick={deleteTask}>
                     <FontAwesomeIcon icon={faTrashCan} size="2x"/>
-                </button>}
+                </button>
+            }
         </div>
     )
 }
