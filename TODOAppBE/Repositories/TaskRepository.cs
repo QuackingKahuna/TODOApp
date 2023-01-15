@@ -18,9 +18,7 @@ namespace TODOAppBE.Repositories
 
     public class TaskRepository : ITaskRepository
     {
-        private IList<TaskEntity> TaskEntities = new List<TaskEntity>() 
-        { 
-        };
+        private IList<TaskEntity> TaskEntities = new List<TaskEntity>();
 
         public string Delete(Guid id)
         {

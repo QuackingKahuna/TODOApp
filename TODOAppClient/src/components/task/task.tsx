@@ -202,7 +202,7 @@ export const Task: React.FC<Props> = ({taskAction, databaseData, refreshHook, ex
             <input 
                 type="text"
                 className="name"
-                placeholder="Task name"
+                placeholder="Note a task"
                 onChange={handleChange}
                 name="name"
                 value={taskData.name}/>

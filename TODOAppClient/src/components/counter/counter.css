@@ -23,9 +23,11 @@
     flex: 1;
     border-radius: 20%;
     font-size: calc(12px + 0.2vh);
-    min-height: 3vh;
+    min-height: 2.5vh;
+    max-width: 2.5vh;
     background-color: transparent;
     font-weight: 700;
+    margin: 0.1vh 0vh;
 }
 
 .plus{
@@ -39,7 +41,7 @@
 }
 
 .plus:active {
-    transform: scale(0.9);
+    transform: scale(0.9) rotate(90deg);
 }
 
 .minus{
@@ -53,5 +55,5 @@
 }
 
 .minus:active {
-    transform: scale(0.9);
+    transform: scale(0.9) rotate(270deg);
 }
