@@ -1,0 +1,52 @@
+.counter {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0vh 2vh 0vh 0vh
+}
+
+.value {
+    flex: 1;
+    text-align: center;
+    font-weight: 600;
+    font-size: calc(14px + 0.3vh);
+}
+
+.buttons {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.buttons > button{
+    flex: 1;
+    border: 1px solid gray;
+    border-radius: 20%;
+    font-size: calc(12px + 0.2vh);
+    min-height: 3vh;
+}
+
+.plus{
+    background-color: #61dafb;
+}
+
+.plus:hover {
+    background-color: #56bfdf;
+}
+
+.plus:active {
+    transform: scale(0.9);
+}
+
+.minus{
+    background-color:indianred;
+}
+
+.minus:hover {
+    background-color:rgb(160, 71, 71);
+}
+
+.minus:active {
+    transform: scale(0.9);
+}

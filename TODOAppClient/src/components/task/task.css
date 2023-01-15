@@ -1,0 +1,66 @@
+input {
+    border: 0px;
+}
+
+select {
+    border: 0px;
+    text-align: center;
+    min-height: 5vh;
+}
+
+.task {
+    border: 1px solid navy;
+    margin: 0.4vh 15vh;
+    min-height: 6vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform .2s;
+    font-size: calc(5px + 1.5vmin);
+}
+
+.task:hover {
+    transform: scale(1.05);
+}
+
+.addTask{
+    margin-top: 1vh;
+    margin-bottom: 5vh;
+}
+
+.name {
+    flex: 10;
+    text-align: center;
+    min-height: 5vh;
+}
+
+.priority {
+    flex: 1;
+    text-align: center;
+    width: 2vh;
+}
+
+.status {
+    flex: 2;
+    text-align: center;
+}
+
+.action, .delete {
+    background-color: white;
+    flex: 1;
+    padding: 1.1vh 0;
+    border: 0vh;
+    margin: 3px;
+}
+
+.action:hover {
+    color: #61dafb;
+}
+
+.delete:hover {
+    color:indianred;
+}
+
+.action:active, .delete:active{
+    transform: scale(0.9);
+}

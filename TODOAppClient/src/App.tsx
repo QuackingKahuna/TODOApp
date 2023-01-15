@@ -1,25 +1,19 @@
 import React from 'react';
 import { Header } from './components/header/header';
+import { Task, TaskAction, Status } from './components/task/task';
 import './App.css';
 
 const App: React.FC = () => {
   return (
     <div className="App">
       <Header/>
-      <body>
-        
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-      </body>
+      <div>
+        <div className="new-task-title">Create a new task</div>
+        <Task taskAction={TaskAction.Save}/>
+        <Task taskAction={TaskAction.Edit}/>
+        <Task taskAction={TaskAction.Edit}/>
+        <Task taskAction={TaskAction.Edit} status={Status.Completed}/>
+      </div>
     </div>
   );
 }
