@@ -8,7 +8,7 @@ namespace TODOAppBE.Controllers
 {
     public interface ITaskController
     {
-        string Delete(Guid id);
+        TaskDto Delete(Guid id);
         bool Edit(TaskDto dto);
         Guid Insert(InsertTaskDto dto);
         TaskDto Get(Guid id);
@@ -30,11 +30,13 @@ namespace TODOAppBE.Controllers
             _taskRepository = taskRepository;
         }
 
-        [HttpDelete]
-        public string Delete(Guid id)
+        [HttpDelete("{id:guid}")]
+        public TaskDto Delete(Guid id)
         {
             var name = _taskRepository.Delete(id);
-            return name;
+            return new TaskDto{
+                Name = name
+            };
         }
 
         [HttpPost]
@@ -43,7 +45,14 @@ namespace TODOAppBE.Controllers
             var entity = _taskRepository.Get(dto.Id);
             if(entity != null)
             {
-                if(dto.Status != entity.Status)
+                if (dto.Name != entity.Name)
+                {
+                    if (_taskRepository.validTaskName(dto.Name))
+                        entity.Rename(dto.Name);
+                    else
+                        throw new Exception("This task already exists");
+                }
+                if (dto.Status != entity.Status)
                 {
                     switch(dto.Status)
                     {
@@ -60,8 +69,6 @@ namespace TODOAppBE.Controllers
                 }
                 if(dto.Priority != entity.Priority)
                     entity.ChangePriority(dto.Priority);
-                if(dto.Name != entity.Name)
-                    entity.Rename(dto.Name);
             }
             return true;
         }

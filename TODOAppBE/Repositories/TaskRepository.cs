@@ -1,4 +1,5 @@
-﻿using TODOAppBE.Common;
+﻿using System.Threading.Tasks;
+using TODOAppBE.Common;
 using TODOAppBE.Entities;
 
 namespace TODOAppBE.Repositories
@@ -11,6 +12,8 @@ namespace TODOAppBE.Repositories
         TaskEntity Get(Guid id);
         IList<TaskEntity> GetAll();
         TaskEntity Insert(TaskEntity task);
+
+        bool validTaskName(string name);
     }
 
     public class TaskRepository : ITaskRepository
@@ -51,6 +54,13 @@ namespace TODOAppBE.Repositories
 
             TaskEntities.Add(task);
             return task;
+        }
+
+        public bool validTaskName(string name)
+        {
+            if (TaskEntities.Any(x => x.Name == name))
+                return false;
+            return true;
         }
     }
 }
