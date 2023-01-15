@@ -20,7 +20,6 @@ namespace TODOAppBE.Repositories
     {
         private IList<TaskEntity> TaskEntities = new List<TaskEntity>() 
         { 
-            new TaskEntity("Test BE", 2, Status.InProgress)    
         };
 
         public string Delete(Guid id)
