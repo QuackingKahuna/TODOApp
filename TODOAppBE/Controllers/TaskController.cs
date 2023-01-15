@@ -76,7 +76,6 @@ namespace TODOAppBE.Controllers
         [HttpGet]
         public IEnumerable<TaskDto> GetAll()
         {
-            _taskRepository.Insert(new TaskEntity("Test BE", 2, Status.InProgress));
             return _taskRepository.GetAll().Select(x => new TaskDto().Map(x));
         }
 

@@ -15,7 +15,10 @@ namespace TODOAppBE.Repositories
 
     public class TaskRepository : ITaskRepository
     {
-        private IList<TaskEntity> TaskEntities = new List<TaskEntity>();
+        private IList<TaskEntity> TaskEntities = new List<TaskEntity>() 
+        { 
+            new TaskEntity("Test BE", 2, Status.InProgress)    
+        };
 
         public string Delete(Guid id)
         {

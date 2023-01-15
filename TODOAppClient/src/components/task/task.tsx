@@ -3,12 +3,7 @@ import "./task.css";
 import { Counter } from "../counter/counter";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFloppyDisk, faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons'
-
-export const enum Status {
-    NotStarted = 10,
-    InProgress = 20,
-    Completed = 30
-}
+import { Status } from "../../services/contracts/enums"
 
 export const enum TaskAction {
     Save = 1,
@@ -34,7 +29,7 @@ export const Task: React.FC<Props> = ({taskAction, databaseData}) => {
         priority: databaseData ? databaseData.priority : 1,
         status: databaseData ? databaseData.status : Status.NotStarted
     })
-    
+    console.log(databaseData, taskData)
     function handleChange(event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) {
         const {name, value} = event.target
         setTaskData(previousData => {

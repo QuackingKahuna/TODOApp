@@ -1,27 +1,28 @@
 import React from 'react';
 import { Header } from './components/header/header';
-import { Task, TaskAction, Status, TaskData } from './components/task/task';
+import { Task, TaskAction, TaskData } from './components/task/task';
 import { GetAllTasks } from './services/taskApi';
+import { Status } from './services/contracts/enums';
 import './App.css';
+import TaskDto from './services/contracts/taskDto';
 
 const App: React.FC = () => {
-  GetAllTasks()
-
-  var databaseData: TaskData = {
-    name: "Task 1",
-    priority: 1,
-    status: Status.InProgress
-  }
+  const [databaseTasks, setDatabaseTasks] = React.useState<TaskDto[]>([])
   
+  React.useEffect(() => {
+    const fetchData = async function t(){
+      setDatabaseTasks(await GetAllTasks())
+    }
+    fetchData()
+  }, [])
+  console.log(databaseTasks)
   return (
     <div className="App">
       <Header/>
       <div>
         <div className="new-task-title">Create a new task</div>
         <Task taskAction={TaskAction.Save}/>
-        <Task taskAction={TaskAction.Edit} databaseData={databaseData}/>
-        <Task taskAction={TaskAction.Edit} databaseData={databaseData}/>
-        <Task taskAction={TaskAction.Edit} databaseData={databaseData}/>
+        {databaseTasks.map(x => (<Task key={x.id} taskAction={TaskAction.Edit} databaseData={x}/>))}
       </div>
     </div>
   );
