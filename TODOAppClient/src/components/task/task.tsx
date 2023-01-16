@@ -85,10 +85,12 @@ export const Task: React.FC<Props> = ({taskAction, databaseData, refreshHook, ex
         }
         else if(taskData.updateTrigger){
             const updateTask = async () => {
-                await UpdateTask({...taskData, id: taskData.id ? taskData.id : ""})
+                var success = await UpdateTask({...taskData, id: taskData.id ? taskData.id : ""})
                 setTaskData(x => {
                     return { ...x, updateTrigger: 0}
                 })
+                //TODO: Give user an option to refresh the data - At this moment each task has its own state so there shouldn't be data loss
+                if(!success) alert("There was an unexpected mistake, the data will be refreshed.")
                 refreshHook()
             }
             if(existingTaskNames.some(name => name === taskData.name))
@@ -99,9 +101,11 @@ export const Task: React.FC<Props> = ({taskAction, databaseData, refreshHook, ex
         else if(taskData.deleteTrigger){
             const deleteTask = async () => {
                 try{
-                    var taskName = await DeleteTask(taskData.id ? taskData.id : "")
+                    var success = await DeleteTask(taskData.id ? taskData.id : "")
+                    if(success) alert(`Task ${taskData.name} was deleted`)
+                    else alert("There was an unexpected mistake, the data will be refreshed.")
+                    //REFACTOR Idea: Let's move user alerts to one space.  
                     refreshHook()
-                    alert(`Task ${taskName} was deleted`)
                 }
                 catch(e){
                     setTaskData(x => {
@@ -113,16 +117,20 @@ export const Task: React.FC<Props> = ({taskAction, databaseData, refreshHook, ex
         }
         else if(taskData.updateAndDeleteTrigger){
             const updateAndDeleteTask = async () => {
-                await UpdateTask({...taskData, id: taskData.id ? taskData.id : ""})
-                try{
-                    var taskName = await DeleteTask(taskData.id ? taskData.id : "")
-                    refreshHook()
-                    alert(`Task ${taskName} was deleted`)
-                }
-                catch(e){
-                    setTaskData(x => {
-                        return { ...x, updateAndDeleteTrigger: 0}
-                    })
+                var updateSuccess = await UpdateTask({...taskData, id: taskData.id ? taskData.id : ""})
+                if(!updateSuccess) alert("Attempt to edit task to completed state was unsuccessful")
+                else{
+                    try{
+                        var deleteSuccess = await DeleteTask(taskData.id ? taskData.id : "")
+                        if(deleteSuccess) alert(`Task ${taskData.name} was deleted`)
+                        else alert("There was an unexpected mistake, the data will be refreshed.")
+                        refreshHook()
+                    }
+                    catch(e){
+                        setTaskData(x => {
+                            return { ...x, updateAndDeleteTrigger: 0}
+                        })
+                    }
                 }
                 refreshHook()
             }

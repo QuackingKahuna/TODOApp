@@ -8,8 +8,8 @@ namespace TODOAppBE.Controllers
 {
     public interface ITaskController
     {
-        TaskDto Delete(Guid id);
-        bool Edit(TaskDto dto);
+        ActionResult Delete(Guid id);
+        ActionResult Edit(TaskDto dto);
         Guid Insert(InsertTaskDto dto);
         TaskDto Get(Guid id);
         IEnumerable<TaskDto> GetAll();
@@ -31,16 +31,14 @@ namespace TODOAppBE.Controllers
         }
 
         [HttpDelete("{id:guid}")]
-        public TaskDto Delete(Guid id)
+        public ActionResult Delete(Guid id)
         {
             var name = _taskRepository.Delete(id);
-            return new TaskDto{
-                Name = name
-            };
+            return NoContent();
         }
 
         [HttpPost]
-        public bool Edit(TaskDto dto)
+        public ActionResult Edit(TaskDto dto)
         {
             var entity = _taskRepository.Get(dto.Id);
             if(entity != null)
@@ -70,7 +68,7 @@ namespace TODOAppBE.Controllers
                 if(dto.Priority != entity.Priority)
                     entity.ChangePriority(dto.Priority);
             }
-            return true;
+            return NoContent();
         }
 
         [HttpGet]
