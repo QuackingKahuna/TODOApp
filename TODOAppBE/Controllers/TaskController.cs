@@ -1,23 +1,23 @@
+using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 using TODOAppBE.Common;
 using TODOAppBE.Contracts;
 using TODOAppBE.Entities;
+using TODOAppBE.ErrorsCollection;
 using TODOAppBE.Repositories;
 
 namespace TODOAppBE.Controllers
 {
     public interface ITaskController
     {
-        ActionResult Delete(Guid id);
-        ActionResult Edit(TaskDto dto);
-        Guid Insert(InsertTaskDto dto);
-        TaskDto Get(Guid id);
-        IEnumerable<TaskDto> GetAll();
+        IActionResult Delete(Guid id);
+        IActionResult Edit(TaskDto dto);
+        IActionResult Insert(InsertTaskDto dto);
+        IActionResult Get(Guid id);
+        IActionResult GetAll();
     }
     
-    [ApiController]
-    [Route("api/[controller]/[action]")]
-    public class TaskController : ControllerBase, ITaskController
+    public class TaskController : ApiController, ITaskController
     {
         private readonly ILogger<TaskController> _logger;
         private readonly ITaskRepository _taskRepository;
@@ -31,65 +31,71 @@ namespace TODOAppBE.Controllers
         }
 
         [HttpDelete("{id:guid}")]
-        public ActionResult Delete(Guid id)
+        public IActionResult Delete(Guid id)
         {
-            var name = _taskRepository.Delete(id);
-            return NoContent();
+            var deleteResult = _taskRepository.Delete(id);
+            return deleteResult.Match(success => NoContent(), errors => Problem(errors));
         }
 
         [HttpPost]
-        public ActionResult Edit(TaskDto dto)
+        public IActionResult Edit(TaskDto dto)
         {
-            var entity = _taskRepository.Get(dto.Id);
-            if(entity != null)
-            {
-                if (dto.Name != entity.Name)
+            var entityResult = _taskRepository.Get(dto.Id);
+            return entityResult.Match(
+                entity => 
                 {
-                    if (_taskRepository.validTaskName(dto.Name))
-                        entity.Rename(dto.Name);
-                    else
-                        throw new Exception("This task already exists");
-                }
-                if (dto.Status != entity.Status)
-                {
-                    switch(dto.Status)
+                    if (dto.Name != entity.Name)
                     {
-                        case Status.NotStarted:
-                            entity.NotStarted();
-                            break;
-                        case Status.InProgress:
-                            entity.InProgress(); 
-                            break;
-                        case Status.Completed: 
-                            entity.Completed(); 
-                            break;
+                        if (_taskRepository.validTaskName(dto.Name))
+                            entity.Rename(dto.Name);
+                        else
+                            return ProblemSingle(Errors.Task.TaskAlreadyExists);
                     }
-                }
-                if(dto.Priority != entity.Priority)
-                    entity.ChangePriority(dto.Priority);
-            }
-            return NoContent();
+                    if (dto.Status != entity.Status)
+                    {
+                        switch (dto.Status)
+                        {
+                            case Status.NotStarted:
+                                entity.NotStarted();
+                                break;
+                            case Status.InProgress:
+                                entity.InProgress();
+                                break;
+                            case Status.Completed:
+                                entity.Completed();
+                                break;
+                        }
+                    }
+                    if (dto.Priority != entity.Priority)
+                        entity.ChangePriority(dto.Priority);
+                    return NoContent();
+                },
+                errors => Problem(errors));
         }
 
         [HttpGet]
-        public TaskDto Get(Guid id)
+        public IActionResult Get(Guid id)
         {
-            var task = _taskRepository.Get(id);
-            return task == null ? null : new TaskDto().Map(task);
+            var getResult = _taskRepository.Get(id);
+            return getResult.Match(
+                entity => Ok(new TaskDto().Map(entity)),
+                errors => Problem(errors));
         }
 
         [HttpGet]
-        public IEnumerable<TaskDto> GetAll()
+        public IActionResult GetAll()
         {
-            return _taskRepository.GetAll().Select(x => new TaskDto().Map(x));
+            return Ok(_taskRepository.GetAll().Select(x => new TaskDto().Map(x)));
         }
 
         [HttpPost]
-        public Guid Insert(InsertTaskDto dto)
+        public IActionResult Insert(InsertTaskDto dto)
         {
             var entity = new TaskEntity(dto.Name, dto.Priority, dto.Status);
-            entity = _taskRepository.Insert(entity);
-            return entity.Id;
+            var insertResult = _taskRepository.Insert(entity);
+            return insertResult.Match(
+                entity => Ok(entity.Id),
+                errors => Problem(errors));
         }
     }
 }

@@ -20,7 +20,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//app.UseHttpsRedirection();
+app.UseExceptionHandler("/error");
+app.UseHttpsRedirection();
 
 app.UseCors(x => x
     .AllowAnyMethod()

@@ -1,17 +1,19 @@
-﻿using System.Threading.Tasks;
+﻿using ErrorOr;
+using System.Threading.Tasks;
 using TODOAppBE.Common;
 using TODOAppBE.Entities;
+using TODOAppBE.ErrorsCollection;
 
 namespace TODOAppBE.Repositories
 {
     public interface ITaskRepository
     {
-        string Delete(Guid id);
+        ErrorOr<bool> Delete(Guid id);
         
         /// <inheritdoc cref="TaskRepository.Get"/>
-        TaskEntity Get(Guid id);
+        ErrorOr<TaskEntity> Get(Guid id);
         IList<TaskEntity> GetAll();
-        TaskEntity Insert(TaskEntity task);
+        ErrorOr<TaskEntity> Insert(TaskEntity task);
 
         bool validTaskName(string name);
     }
@@ -20,23 +22,28 @@ namespace TODOAppBE.Repositories
     {
         private IList<TaskEntity> TaskEntities = new List<TaskEntity>();
 
-        public string Delete(Guid id)
+        public ErrorOr<bool> Delete(Guid id)
         {
-            var entityToRemove = Get(id);
-            if (entityToRemove != null)
+            var entityToRemoveResult = Get(id);
+            ErrorOr<bool> res;
+            if (entityToRemoveResult.IsError) res = entityToRemoveResult.FirstError;
+            else
             {
-                if (entityToRemove.Status == Status.Completed)
-                    TaskEntities.Remove(entityToRemove);
-                else throw new Exception("Task has not been completed yet.");
+                if (entityToRemoveResult.Value.Status == Status.Completed)
+                {
+                    TaskEntities.Remove(entityToRemoveResult.Value);
+                    res = true;
+                }
+                else res = Errors.Task.UncompletedTaskToDelete;
             }
-
-            return entityToRemove?.Name;
+            return res;
         }
 
         /// <returns>TaskEntity or null</returns>
-        public TaskEntity Get(Guid id)
+        public ErrorOr<TaskEntity> Get(Guid id)
         {
-            return TaskEntities.FirstOrDefault(x => x.Id.Equals(id));
+            var entity = TaskEntities.FirstOrDefault(x => x.Id.Equals(id));
+            return entity != null ? entity : Errors.Task.NotFound;
         }
 
         public IList<TaskEntity> GetAll()
@@ -44,13 +51,14 @@ namespace TODOAppBE.Repositories
             return TaskEntities;
         }
 
-        public TaskEntity Insert(TaskEntity task)
+        public ErrorOr<TaskEntity> Insert(TaskEntity task)
         {
-            if (TaskEntities.Any(x => x.Name == task.Name)) 
-                throw new Exception("This task already exists.");
-
-            TaskEntities.Add(task);
-            return task;
+            if (validTaskName(task.Name))
+            {
+                TaskEntities.Add(task);
+                return task;
+            }
+            else return Errors.Task.TaskAlreadyExists;
         }
 
         public bool validTaskName(string name)
