@@ -1,5 +1,4 @@
 ﻿using ErrorOr;
-using System.Threading.Tasks;
 using TODOAppBE.Common;
 using TODOAppBE.Entities;
 using TODOAppBE.ErrorsCollection;
@@ -39,7 +38,7 @@ namespace TODOAppBE.Repositories
             return res;
         }
 
-        /// <returns>TaskEntity or null</returns>
+        /// <summary>Just showing a usage of xml documentation.</summary>
         public ErrorOr<TaskEntity> Get(Guid id)
         {
             var entity = TaskEntities.FirstOrDefault(x => x.Id.Equals(id));
